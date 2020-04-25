@@ -50,8 +50,21 @@ clf = LogisticRegression(C=0.1, class_weight=None, dual=False, fit_intercept=Tru
 clf.fit(X,y)
 
 @app.route('/')
-def index():
-	return "hello Flask"
+def home():
+    return render_template('index.html')
+
+@app.route('/predict',methods=['POST'])
+def predict():
+    if request.method == 'POST':
+        message = request.form['message']
+        data = [message]
+        vect = pd.DataFrame(cv.transform(data).toarray())
+        body_len = pd.DataFrame([len(data) - data.count(" ")])
+        punct = pd.DataFrame([count_punct(data)])
+        total_data = pd.concat([body_len,punct,vect],axis = 1)
+        my_prediction = clf.predict(total_data)
+    return render_template('predict.html',prediction = my_prediction)
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
