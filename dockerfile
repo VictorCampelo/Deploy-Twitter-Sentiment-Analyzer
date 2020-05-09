@@ -9,6 +9,6 @@ RUN pip install -r requirements.txt
 RUN python -m nltk.downloader punkt
 EXPOSE 4000
 
-ENTRYPOINT  ["python"]
+ENTRYPOINT  ["python3"]
 
 CMD ["app.py"]
